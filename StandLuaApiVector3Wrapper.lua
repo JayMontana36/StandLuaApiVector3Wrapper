@@ -33,15 +33,15 @@ local V3WrapperMetaTable =
 							v3.free(MemPtrV3)
 						end
 					end,
-	__index		=	function(Self, Key, ...)
+	__index		=	function(Self, Key)
 						local MemPtrV3 = Self.V3
-						return V3WrapperKeyFunctionsA[Key](MemPtrV3, ...) or MemPtrV3
+						return V3WrapperKeyFunctionsA[Key](MemPtrV3) or MemPtrV3
 					end,
-	__newindex	=	function(Self, Key, Value, ...)
+	__newindex	=	function(Self, Key, Value)
 						if Key ~= "V3" then
 							if (Key == "x" or Key == "y" or Key == "z") then
 								local MemPtrV3 = Self.V3
-								return V3WrapperKeyFunctionsB[Key](MemPtrV3, Value, ...)
+								return V3WrapperKeyFunctionsB[Key](MemPtrV3, Value)
 							end
 							Self[Key] = Value
 						end
