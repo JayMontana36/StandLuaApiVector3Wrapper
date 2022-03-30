@@ -43,11 +43,15 @@ local V3WrapperMetaTable =
 					end,
 }
 
+local V3WrapperArchive = setmetatable({},{ __mode	= "kv" })
+
 local v3_new = v3.new
 local V3NewFunctions =
 {
 	table	=	function(V3Table)
-					return { V3 = v3_new(V3Table) }
+					V3Table.V3 = v3_new(V3Table)
+					V3Table.x, V3Table.y, V3Table.z = nil, nil, nil
+					return V3Table
 				end,
 	number	=	function(x, args)
 					return { V3 = v3_new(x, args[2], args[3]) }
@@ -56,7 +60,12 @@ local V3NewFunctions =
 local V3New = function(...)
 	local args = {...}
 	local arg1 = args[1]
-	return setmetatable(V3NewFunctions[type(arg1)](arg1, args),V3WrapperMetaTable)
+	
+	local WrappedV3 = setmetatable(V3NewFunctions[type(arg1)](arg1, args),V3WrapperMetaTable)
+	
+	table.insert(V3WrapperArchive, WrappedV3)
+	
+	return WrappedV3
 end
 
 --v3.new = V3New
