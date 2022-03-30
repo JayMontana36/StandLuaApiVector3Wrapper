@@ -35,7 +35,7 @@ local V3WrapperMetaTable =
 						return V3WrapperKeyFunctionsA[Key](MemPtrV3, ...) or MemPtrV3
 					end,
 	__newindex	=	function(Self, Key, Value, ...)
-						if (Key == "x" or Key == "y" or Key ~= "z") and Key ~= "V3" then
+						if (Key == "x" or Key == "y" or Key == "z") and Key ~= "V3" then
 							local MemPtrV3 = Self.V3
 							return V3WrapperKeyFunctionsB[Key](MemPtrV3, Value, ...)
 						end
