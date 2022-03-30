@@ -1,5 +1,6 @@
-local DummyFunctionA = function()end
-local DummyFunctionB = function()return DummyFunctionA end
+local DummyFunction = function()end
+
+local v3 = v3
 
 local V3WrapperKeyFunctionsA = setmetatable(
 	{
@@ -8,7 +9,9 @@ local V3WrapperKeyFunctionsA = setmetatable(
 		z = v3.getZ,
 	},
 	{
-		__index=DummyFunctionB
+		__index	=	function(Self, Key)
+						return v3[Key] or DummyFunction
+					end
 	}
 )
 local V3WrapperKeyFunctionsB = setmetatable(
@@ -18,7 +21,7 @@ local V3WrapperKeyFunctionsB = setmetatable(
 		z = v3.setZ,
 	},
 	{
-		__index=DummyFunctionB
+		__index=function()return DummyFunction end
 	}
 )
 
