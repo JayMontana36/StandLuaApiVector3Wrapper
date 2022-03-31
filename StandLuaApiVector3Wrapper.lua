@@ -4,11 +4,12 @@ local setmetatable = setmetatable
 
 local DummyFunction = function()end
 
+local v3_getX, v3_getY, v3_getZ = v3.getX, v3.getY, v3.getZ
 local V3WrapperKeyFunctionsA = setmetatable(
 	{
-		x = v3.getX,
-		y = v3.getY,
-		z = v3.getZ,
+		x = v3_getX,
+		y = v3_getY,
+		z = v3_getZ,
 	},
 	{
 		__index	=	function(Self, Key)
@@ -16,11 +17,12 @@ local V3WrapperKeyFunctionsA = setmetatable(
 					end
 	}
 )
+local v3_setX, v3_setY, v3_setZ = v3.setX, v3.setY, v3.setZ
 local V3WrapperKeyFunctionsB = setmetatable(
 	{
-		x = v3.setX,
-		y = v3.setY,
-		z = v3.setZ,
+		x = v3_setX,
+		y = v3_setY,
+		z = v3_setZ,
 	},
 	{
 		__index=function()return DummyFunction end
