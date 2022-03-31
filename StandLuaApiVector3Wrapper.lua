@@ -8,7 +8,7 @@ do
 	local DummyFunction = function()return _DummyFunction end
 	local V3WrapperKeyFunctionsMetaTable = {__index=DummyFunction}
 	
-	local v3_getX, v3_getY, v3_getZ, setmetatable = v3.getX, v3.getY, v3.getZ, setmetatable
+	local v3_getX, v3_getY, v3_getZ = v3.getX, v3.getY, v3.getZ
 	local V3WrapperKeyFunctionsA = setmetatable(
 		{
 			x = v3_getX,
@@ -18,7 +18,7 @@ do
 		V3WrapperKeyFunctionsMetaTable
 	)
 	
-	local v3_setX, v3_setY, v3_setZ, setmetatable = v3.setX, v3.setY, v3.setZ, setmetatable
+	local v3_setX, v3_setY, v3_setZ = v3.setX, v3.setY, v3.setZ
 	local V3WrapperKeyFunctionsB = setmetatable(
 		{
 			x = v3_setX,
