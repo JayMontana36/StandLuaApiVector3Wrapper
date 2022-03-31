@@ -2,50 +2,54 @@
 local v3 = v3
 local setmetatable = setmetatable
 
-local _DummyFunction = function()end
-local DummyFunction = function()return _DummyFunction end
-
-local v3_getX, v3_getY, v3_getZ = v3.getX, v3.getY, v3.getZ
-local V3WrapperKeyFunctionsA = setmetatable(
+local V3WrapperMetaTable
+do
+	local _DummyFunction = function()end
+	local DummyFunction = function()return _DummyFunction end
+	
+	local v3_getX, v3_getY, v3_getZ = v3.getX, v3.getY, v3.getZ
+	local V3WrapperKeyFunctionsA = setmetatable(
+		{
+			x = v3_getX,
+			y = v3_getY,
+			z = v3_getZ,
+		},{__index=DummyFunction}
+	)
+	
+	local v3_setX, v3_setY, v3_setZ = v3.setX, v3.setY, v3.setZ
+	local V3WrapperKeyFunctionsB = setmetatable(
+		{
+			x = v3_setX,
+			y = v3_setY,
+			z = v3_setZ,
+		},{__index=DummyFunction}
+	)
+	
+	V3WrapperMetaTable =
 	{
-		x = v3_getX,
-		y = v3_getY,
-		z = v3_getZ,
-	},{__index=DummyFunction}
-)
-local v3_setX, v3_setY, v3_setZ = v3.setX, v3.setY, v3.setZ
-local V3WrapperKeyFunctionsB = setmetatable(
-	{
-		x = v3_setX,
-		y = v3_setY,
-		z = v3_setZ,
-	},{__index=DummyFunction}
-)
-
-local V3WrapperMetaTable =
-{
-	__gc		=	function(Self)
-						local MemPtrV3 = Self.V3
-						if MemPtrV3 then
-							v3.free(MemPtrV3)
-						end
-					end,
-	__index		=	function(Self, Key)
-						local MemPtrV3 = Self.V3
-						return V3WrapperKeyFunctionsA[Key](MemPtrV3) or MemPtrV3
-					end,
-	__newindex	=	function(Self, Key, Value)
-						if Key ~= "V3" then
-							if (Key == "x" or Key == "y" or Key == "z") then
-								local MemPtrV3 = Self.V3
-								return V3WrapperKeyFunctionsB[Key](MemPtrV3, Value)
+		__gc		=	function(Self)
+							local MemPtrV3 = Self.V3
+							if MemPtrV3 then
+								v3.free(MemPtrV3)
 							end
-							Self[Key] = Value
-						end
-					end,
-}
+						end,
+		__index		=	function(Self, Key)
+							local MemPtrV3 = Self.V3
+							return V3WrapperKeyFunctionsA[Key](MemPtrV3) or MemPtrV3
+						end,
+		__newindex	=	function(Self, Key, Value)
+							if Key ~= "V3" then
+								if (Key == "x" or Key == "y" or Key == "z") then
+									local MemPtrV3 = Self.V3
+									return V3WrapperKeyFunctionsB[Key](MemPtrV3, Value)
+								end
+								Self[Key] = Value
+							end
+						end,
+	}
+end
 
-local V3WrapperArchive = setmetatable({},{ __mode	= "kv" })
+local V3WrapperArchive = setmetatable({},{__mode="kv"})
 
 
 
