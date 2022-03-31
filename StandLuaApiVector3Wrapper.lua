@@ -81,7 +81,6 @@ do
 								
 								return WrappedV3
 							end
-							
 						end,
 		get			=	function()
 							local v3_get = v3.get
