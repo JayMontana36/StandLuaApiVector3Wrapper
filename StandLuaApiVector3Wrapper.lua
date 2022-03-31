@@ -66,23 +66,26 @@ do
 		local V3NewFunctions =
 		{
 			table	=	function(V3Table)
-							if not V3Table.V3 then
+							local V3 = V3Table.V3
+							if not V3 then
 								V3Table.V3 = v3_new(V3Table)
 								V3Table.x, V3Table.y, V3Table.z = nil, nil, nil
 							end
-							return V3Table
+							return V3Table, not V3
 						end,
 			number	=	function(x, args)
-							return { V3 = v3_new(x, args[2], args[3]) }
+							return { V3 = v3_new(x, args[2], args[3]) }, true
 						end,
 		}
 		V3New = function(...)
 			local args = {...}
 			local arg1 = args[1]
 			
-			local WrappedV3 = setmetatable(V3NewFunctions[type(arg1)](arg1, args), V3WrapperMetaTable)
-			
-			table.insert(V3WrapperArchive, WrappedV3)
+			local WrappedV3, IsNew = V3NewFunctions[type(arg1)](arg1, args)
+			if IsNew then
+				setmetatable(WrappedV3, V3WrapperMetaTable)
+				table.insert(V3WrapperArchive, WrappedV3)
+			end
 			
 			return WrappedV3
 		end
