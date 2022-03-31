@@ -66,8 +66,10 @@ do
 		local V3NewFunctions =
 		{
 			table	=	function(V3Table)
-							V3Table.V3 = v3_new(V3Table)
-							V3Table.x, V3Table.y, V3Table.z = nil, nil, nil
+							if not V3Table.V3 then
+								V3Table.V3 = v3_new(V3Table)
+								V3Table.x, V3Table.y, V3Table.z = nil, nil, nil
+							end
 							return V3Table
 						end,
 			number	=	function(x, args)
