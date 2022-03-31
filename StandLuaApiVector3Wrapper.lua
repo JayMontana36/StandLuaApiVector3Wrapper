@@ -269,6 +269,7 @@ do
 			return V3New(Function(...))
 		end
 	end
+	v3.V3WrapperOverrideFunctionOutput = OverrideFunctionV3Output
 	
 	native_invoker.get_return_value_vector3 = OverrideFunctionV3Output(native_invoker.get_return_value_vector3)
 	memory.read_vector3 = OverrideFunctionV3Output(memory.read_vector3)
