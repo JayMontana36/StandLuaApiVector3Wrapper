@@ -97,6 +97,15 @@ do
 			new			=	function()
 								return V3New
 							end,
+			free		=	function()
+								local v3_free = v3.free
+								local setmetatable = setmetatable
+								return function(WrappedV3)
+									v3_free(WrappedV3.V3)
+									setmetatable(WrappedV3,nil)
+									WrappedV3.V3 = nil
+								end
+							end,
 			get			=	function()
 								local v3_get = v3.get
 								return function(WrappedV3)
