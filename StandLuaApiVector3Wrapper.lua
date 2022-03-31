@@ -29,6 +29,7 @@ do
 	)
 	
 	local v3_free = v3.free
+	local rawset = rawset
 	V3WrapperMetaTable =
 	{
 		__gc		=	function(Self)
@@ -47,7 +48,7 @@ do
 									local MemPtrV3 = Self.V3
 									return V3WrapperKeyFunctionsB[Key](MemPtrV3, Value)
 								end
-								Self[Key] = Value
+								rawset(Self, Key, Value)
 							end
 						end,
 	}
