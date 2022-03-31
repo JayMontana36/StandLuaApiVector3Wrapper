@@ -2,7 +2,8 @@
 local v3 = v3
 local setmetatable = setmetatable
 
-local DummyFunction = function()end
+local _DummyFunction = function()end
+local DummyFunction = function()return _DummyFunction end
 
 local v3_getX, v3_getY, v3_getZ = v3.getX, v3.getY, v3.getZ
 local V3WrapperKeyFunctionsA = setmetatable(
@@ -10,12 +11,7 @@ local V3WrapperKeyFunctionsA = setmetatable(
 		x = v3_getX,
 		y = v3_getY,
 		z = v3_getZ,
-	},
-	{
-		__index	=	function(Self, Key)
-						return v3[Key] or DummyFunction
-					end
-	}
+	},{__index=DummyFunction}
 )
 local v3_setX, v3_setY, v3_setZ = v3.setX, v3.setY, v3.setZ
 local V3WrapperKeyFunctionsB = setmetatable(
@@ -23,10 +19,7 @@ local V3WrapperKeyFunctionsB = setmetatable(
 		x = v3_setX,
 		y = v3_setY,
 		z = v3_setZ,
-	},
-	{
-		__index=function()return DummyFunction end
-	}
+	},{__index=DummyFunction}
 )
 
 local V3WrapperMetaTable =
