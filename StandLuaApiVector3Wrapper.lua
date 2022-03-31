@@ -245,7 +245,7 @@ do
 								return WrapNewInstance(v3_toDir(WrappedV3.V3))
 							end
 						end,
-		toString		=	function()
+		toString	=	function()
 							local v3_toString = v3.toString
 							return function(WrappedV3)
 								return WrapNewInstance(v3_toString(WrappedV3.V3))
