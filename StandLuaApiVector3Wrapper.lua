@@ -6,31 +6,35 @@ local V3WrapperMetaTable
 do
 	local _DummyFunction = function()end
 	local DummyFunction = function()return _DummyFunction end
+	local V3WrapperKeyFunctionsMetaTable = {__index=DummyFunction}
 	
-	local v3_getX, v3_getY, v3_getZ = v3.getX, v3.getY, v3.getZ
+	local v3_getX, v3_getY, v3_getZ, setmetatable = v3.getX, v3.getY, v3.getZ, setmetatable
 	local V3WrapperKeyFunctionsA = setmetatable(
 		{
 			x = v3_getX,
 			y = v3_getY,
 			z = v3_getZ,
-		},{__index=DummyFunction}
+		},
+		V3WrapperKeyFunctionsMetaTable
 	)
 	
-	local v3_setX, v3_setY, v3_setZ = v3.setX, v3.setY, v3.setZ
+	local v3_setX, v3_setY, v3_setZ, setmetatable = v3.setX, v3.setY, v3.setZ, setmetatable
 	local V3WrapperKeyFunctionsB = setmetatable(
 		{
 			x = v3_setX,
 			y = v3_setY,
 			z = v3_setZ,
-		},{__index=DummyFunction}
+		},
+		V3WrapperKeyFunctionsMetaTable
 	)
 	
+	local v3_free = v3.free
 	V3WrapperMetaTable =
 	{
 		__gc		=	function(Self)
 							local MemPtrV3 = Self.V3
 							if MemPtrV3 then
-								v3.free(MemPtrV3)
+								v3_free(MemPtrV3)
 							end
 						end,
 		__index		=	function(Self, Key)
