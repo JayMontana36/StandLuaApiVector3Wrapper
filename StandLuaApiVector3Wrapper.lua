@@ -4,32 +4,43 @@ local setmetatable = setmetatable
 
 local V3WrapperMetaTable
 do
-	local _DummyFunction = function()end
-	local DummyFunction = function()return _DummyFunction end
+	local rawset = rawset
+	local v3_free = v3.free
+	
+	local DummyFunction
+	do
+		local _DummyFunction = function()end
+		DummyFunction = function()return _DummyFunction end
+	end
+
 	local V3WrapperKeyFunctionsMetaTable = {__index=DummyFunction}
 	
-	local v3_getX, v3_getY, v3_getZ = v3.getX, v3.getY, v3.getZ
-	local V3WrapperKeyFunctionsA = setmetatable(
-		{
-			x = v3_getX,
-			y = v3_getY,
-			z = v3_getZ,
-		},
-		V3WrapperKeyFunctionsMetaTable
-	)
+	local V3WrapperKeyFunctionsB
+	do
+		local v3_setX, v3_setY, v3_setZ = v3.setX, v3.setY, v3.setZ
+		V3WrapperKeyFunctionsB = setmetatable(
+			{
+				x = v3_setX,
+				y = v3_setY,
+				z = v3_setZ,
+			},
+			V3WrapperKeyFunctionsMetaTable
+		)
+	end
 	
-	local v3_setX, v3_setY, v3_setZ = v3.setX, v3.setY, v3.setZ
-	local V3WrapperKeyFunctionsB = setmetatable(
-		{
-			x = v3_setX,
-			y = v3_setY,
-			z = v3_setZ,
-		},
-		V3WrapperKeyFunctionsMetaTable
-	)
+	local V3WrapperKeyFunctionsA
+	do
+		local v3_getX, v3_getY, v3_getZ = v3.getX, v3.getY, v3.getZ
+		V3WrapperKeyFunctionsA = setmetatable(
+			{
+				x = v3_getX,
+				y = v3_getY,
+				z = v3_getZ,
+			},
+			V3WrapperKeyFunctionsMetaTable
+		)
+	end
 	
-	local v3_free = v3.free
-	local rawset = rawset
 	V3WrapperMetaTable =
 	{
 		__gc		=	function(Self)
