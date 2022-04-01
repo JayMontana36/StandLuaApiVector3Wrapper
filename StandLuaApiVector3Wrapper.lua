@@ -71,18 +71,20 @@ end
 do
 	local V3New
 	do
+		local setmetatable = setmetatable
+		
 		local V3NewFunctions
 		do
 			local v3_new = v3.new
 			V3NewFunctions =
 			{
 				table	=	function(V3Table)
-								local V3 = V3Table.V3
-								if not V3 then
+								local V3 = not V3Table.V3
+								if V3 then
 									V3Table.V3 = v3_new(V3Table)
 									V3Table.x, V3Table.y, V3Table.z = nil, nil, nil
 								end
-								return V3Table, not V3
+								return V3Table, V3
 							end,
 				number	=	function(x, args)
 								return { V3 = v3_new(x, args[2], args[3]) }, true
@@ -90,7 +92,6 @@ do
 			}
 		end
 		
-		local setmetatable = setmetatable
 		V3New = function(...)
 			local args = {...}
 			local arg1 = args[1]
@@ -115,8 +116,8 @@ do
 								return V3New
 							end,
 			free		=	function()
-								local v3_free = v3.free
 								local setmetatable = setmetatable
+								local v3_free = v3.free
 								return function(WrappedV3)
 									v3_free(WrappedV3.V3)
 									setmetatable(WrappedV3,nil)
