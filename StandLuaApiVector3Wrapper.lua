@@ -54,29 +54,32 @@ do
 	}
 end
 
-local V3WrapperArchive = setmetatable({},{__mode="kv"})
-
 
 
 --[[ v3 Functions Overrides ]]
 do
 	local V3New
 	do
-		local v3_new = v3.new
-		local V3NewFunctions =
-		{
-			table	=	function(V3Table)
-							local V3 = V3Table.V3
-							if not V3 then
-								V3Table.V3 = v3_new(V3Table)
-								V3Table.x, V3Table.y, V3Table.z = nil, nil, nil
-							end
-							return V3Table, not V3
-						end,
-			number	=	function(x, args)
-							return { V3 = v3_new(x, args[2], args[3]) }, true
-						end,
-		}
+		local V3NewFunctions
+		do
+			local v3_new = v3.new
+			V3NewFunctions =
+			{
+				table	=	function(V3Table)
+								local V3 = V3Table.V3
+								if not V3 then
+									V3Table.V3 = v3_new(V3Table)
+									V3Table.x, V3Table.y, V3Table.z = nil, nil, nil
+								end
+								return V3Table, not V3
+							end,
+				number	=	function(x, args)
+								return { V3 = v3_new(x, args[2], args[3]) }, true
+							end,
+			}
+		end
+		
+		local setmetatable = setmetatable
 		V3New = function(...)
 			local args = {...}
 			local arg1 = args[1]
@@ -84,7 +87,6 @@ do
 			local WrappedV3, IsNew = V3NewFunctions[type(arg1)](arg1, args)
 			if IsNew then
 				setmetatable(WrappedV3, V3WrapperMetaTable)
-				table.insert(V3WrapperArchive, WrappedV3)
 			end
 			
 			return WrappedV3
@@ -92,10 +94,9 @@ do
 	end
 	
 	do
+		local setmetatable = setmetatable
 		local function WrapNewInstance(Instance)
-			local WrappedV3 = setmetatable({ V3 = Instance }, V3WrapperMetaTable)
-			table.insert(V3WrapperArchive, WrappedV3)
-			return WrappedV3
+			return setmetatable({ V3 = Instance }, V3WrapperMetaTable)
 		end
 		local Functions =
 		{
