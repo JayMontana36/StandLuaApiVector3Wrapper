@@ -24,6 +24,7 @@ do
 			V3WrapperKeyFunctionsMetaTable
 		)
 	end
+	local V3WrapperKeyFunctionsB <const> = V3WrapperKeyFunctionsB
 	
 	local V3WrapperKeyFunctionsA
 	do
@@ -37,6 +38,7 @@ do
 			V3WrapperKeyFunctionsMetaTable
 		)
 	end
+	local V3WrapperKeyFunctionsA <const> = V3WrapperKeyFunctionsA
 	
 	local rawset <const> = rawset
 	local v3_free <const> = v3.free
@@ -91,6 +93,7 @@ do
 							end,
 			}
 		end
+		local V3NewFunctions <const> = V3NewFunctions
 		
 		V3New = function(...)
 			local args <const> = {...}
@@ -104,13 +107,14 @@ do
 			return WrappedV3
 		end
 	end
+	local V3New <const> = V3New
 	
 	do
 		local setmetatable <const> = setmetatable
 		local WrapNewInstance <const> = function(Instance)
 			return setmetatable({ V3 = Instance }, V3WrapperMetaTable)
 		end
-		local Functions =
+		local Functions <const> =
 		{
 			new			=	function()
 								return V3New
@@ -299,7 +303,7 @@ do
 		end
 	end
 	
-	local function OverrideFunctionV3Output(Function)
+	local OverrideFunctionV3Output <const> = function(Function)
 		local Function <const> = Function
 		return function(...)
 			return V3New(Function(...))
