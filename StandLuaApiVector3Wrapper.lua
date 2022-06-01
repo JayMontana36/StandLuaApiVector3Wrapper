@@ -1,23 +1,20 @@
 --[[ Main - Internal Logic Stuff ]]
-local v3 = v3
-local setmetatable = setmetatable
+local v3 <const> = v3
+local setmetatable <const> = setmetatable
 
 local V3WrapperMetaTable
 do
-	local rawset = rawset
-	local v3_free = v3.free
-	
 	local DummyFunction
 	do
-		local _DummyFunction = function()end
+		local _DummyFunction <const> = function()end
 		DummyFunction = function()return _DummyFunction end
 	end
 
-	local V3WrapperKeyFunctionsMetaTable = {__index=DummyFunction}
+	local V3WrapperKeyFunctionsMetaTable <const> = {__index=DummyFunction}
 	
 	local V3WrapperKeyFunctionsB
 	do
-		local v3_setX, v3_setY, v3_setZ = v3.setX, v3.setY, v3.setZ
+		local v3_setX <const>, v3_setY <const>, v3_setZ <const> = v3.setX, v3.setY, v3.setZ
 		V3WrapperKeyFunctionsB = setmetatable(
 			{
 				x = v3_setX,
@@ -30,7 +27,7 @@ do
 	
 	local V3WrapperKeyFunctionsA
 	do
-		local v3_getX, v3_getY, v3_getZ = v3.getX, v3.getY, v3.getZ
+		local v3_getX <const>, v3_getY <const>, v3_getZ <const> = v3.getX, v3.getY, v3.getZ
 		V3WrapperKeyFunctionsA = setmetatable(
 			{
 				x = v3_getX,
@@ -41,22 +38,25 @@ do
 		)
 	end
 	
+	local rawset <const> = rawset
+	local v3_free <const> = v3.free
 	V3WrapperMetaTable =
 	{
 		__gc		=	function(Self)
-							local MemPtrV3 = Self.V3
+							local MemPtrV3 <const> = Self.V3
 							if MemPtrV3 then
 								v3_free(MemPtrV3)
 							end
 						end,
 		__index		=	function(Self, Key)
-							local MemPtrV3 = Self.V3
+							local MemPtrV3 <const> = Self.V3
 							return V3WrapperKeyFunctionsA[Key](MemPtrV3) or MemPtrV3
 						end,
 		__newindex	=	function(Self, Key, Value)
+							local Key <const> = Key
 							if Key ~= "V3" then
 								if (Key == "x" or Key == "y" or Key == "z") then
-									local MemPtrV3 = Self.V3
+									local MemPtrV3 <const> = Self.V3
 									return V3WrapperKeyFunctionsB[Key](MemPtrV3, Value)
 								end
 								rawset(Self, Key, Value)
@@ -71,15 +71,15 @@ end
 do
 	local V3New
 	do
-		local setmetatable = setmetatable
+		local setmetatable <const> = setmetatable
 		
 		local V3NewFunctions
 		do
-			local v3_new = v3.new
+			local v3_new <const> = v3.new
 			V3NewFunctions =
 			{
 				table	=	function(V3Table)
-								local V3 = not V3Table.V3
+								local V3 <const> = not V3Table.V3
 								if V3 then
 									V3Table.V3 = v3_new(V3Table)
 									V3Table.x, V3Table.y, V3Table.z = nil, nil, nil
@@ -93,10 +93,10 @@ do
 		end
 		
 		V3New = function(...)
-			local args = {...}
-			local arg1 = args[1]
+			local args <const> = {...}
+			local arg1 <const> = args[1]
 			
-			local WrappedV3, IsNew = V3NewFunctions[type(arg1)](arg1, args)
+			local WrappedV3 <const>, IsNew <const> = V3NewFunctions[type(arg1)](arg1, args)
 			if IsNew then
 				setmetatable(WrappedV3, V3WrapperMetaTable)
 			end
@@ -106,8 +106,8 @@ do
 	end
 	
 	do
-		local setmetatable = setmetatable
-		local function WrapNewInstance(Instance)
+		local setmetatable <const> = setmetatable
+		local WrapNewInstance <const> = function(Instance)
 			return setmetatable({ V3 = Instance }, V3WrapperMetaTable)
 		end
 		local Functions =
@@ -116,8 +116,8 @@ do
 								return V3New
 							end,
 			free		=	function()
-								local setmetatable = setmetatable
-								local v3_free = v3.free
+								local setmetatable <const> = setmetatable
+								local v3_free <const> = v3.free
 								return function(WrappedV3)
 									v3_free(WrappedV3.V3)
 									setmetatable(WrappedV3,nil)
@@ -125,182 +125,182 @@ do
 								end
 							end,
 			get			=	function()
-								local v3_get = v3.get
+								local v3_get <const> = v3.get
 								return function(WrappedV3)
 									return v3_get(WrappedV3.V3)
 								end
 							end,
 			getX		=	function()
-								local v3_getX = v3.getX
+								local v3_getX <const> = v3.getX
 								return function(WrappedV3)
 									return v3_getX(WrappedV3.V3)
 								end
 							end,
 			getY		=	function()
-								local v3_getY = v3.getY
+								local v3_getY <const> = v3.getY
 								return function(WrappedV3)
 									return v3_getY(WrappedV3.V3)
 								end
 							end,
 			getZ		=	function()
-								local v3_getZ = v3.getZ
+								local v3_getZ <const> = v3.getZ
 								return function(WrappedV3)
 									return v3_getZ(WrappedV3.V3)
 								end
 							end,
 			getHeading	=	function()
-								local v3_getZ = v3.getZ
+								local v3_getHeading <const> = v3.getHeading
 								return function(WrappedV3)
-									return v3_getZ(WrappedV3.V3)
+									return v3_getHeading(WrappedV3.V3)
 								end
 							end,
 			set			=	function() -- Make similar to new so that tables can be supplied?
-								local v3_set = v3.set
+								local v3_set <const> = v3.set
 								return function(WrappedV3, x, y, z)
 									v3_set(WrappedV3.V3, x, y, z)
 								end
 							end,
 			setX		=	function()
-								local v3_setX = v3.setX
+								local v3_setX <const> = v3.setX
 								return function(WrappedV3, x)
 									v3_setX(WrappedV3.V3, x)
 								end
 							end,
 			setY		=	function()
-								local v3_setY = v3.setY
+								local v3_setY <const> = v3.setY
 								return function(WrappedV3, y)
 									v3_setY(WrappedV3.V3, y)
 								end
 							end,
 			setZ		=	function()
-								local v3_setZ = v3.setZ
+								local v3_setZ <const> = v3.setZ
 								return function(WrappedV3, z)
 									return v3_setZ(WrappedV3.V3, z)
 								end
 							end,
 			reset		=	function()
-								local v3_reset = v3.reset
+								local v3_reset <const> = v3.reset
 								return function(WrappedV3)
 									v3_reset(WrappedV3.V3)
 								end
 							end,
 			add			=	function()
-								local v3_add = v3.add
+								local v3_add <const> = v3.add
 								return function(WrappedV3A, WrappedV3B)
 									v3_add(WrappedV3A.V3, WrappedV3B.V3)
 								end
 							end,
 			sub			=	function()
-								local v3_sub = v3.sub
+								local v3_sub <const> = v3.sub
 								return function(WrappedV3A, WrappedV3B)
 									v3_sub(WrappedV3A.V3, WrappedV3B.V3)
 								end
 							end,
 			mul			=	function()
-								local v3_mul = v3.mul
+								local v3_mul <const> = v3.mul
 								return function(WrappedV3A, number)
 									v3_mul(WrappedV3A.V3, number)
 								end
 							end,
 			div			=	function()
-								local v3_div = v3.div
+								local v3_div <const> = v3.div
 								return function(WrappedV3A, number)
 									v3_div(WrappedV3A.V3, number)
 								end
 							end,
 			eq			=	function()
-								local v3_eq = v3.eq
+								local v3_eq <const> = v3.eq
 								return function(WrappedV3A, WrappedV3B)
 									return v3_eq(WrappedV3A.V3, WrappedV3B.V3)
 								end
 							end,
 			magnitude	=	function()
-								local v3_magnitude = v3.magnitude
+								local v3_magnitude <const> = v3.magnitude
 								return function(WrappedV3)
 									return v3_magnitude(WrappedV3.V3)
 								end
 							end,
 			distance	=	function()
-								local v3_distance = v3.distance
+								local v3_distance <const> = v3.distance
 								return function(WrappedV3A, WrappedV3B)
 									return v3_distance(WrappedV3A.V3, WrappedV3B.V3)
 								end
 							end,
 			abs			=	function()
-								local v3_abs = v3.abs
+								local v3_abs <const> = v3.abs
 								return function(WrappedV3)
 									v3_abs(WrappedV3.V3)
 								end
 							end,
 			sum			=	function()
-								local v3_sum = v3.sum
+								local v3_sum <const> = v3.sum
 								return function(WrappedV3)
 									v3_sum(WrappedV3.V3)
 								end
 							end,
 			min			=	function()
-								local v3_min = v3.min
+								local v3_min <const> = v3.min
 								return function(WrappedV3)
 									return v3_min(WrappedV3.V3)
 								end
 							end,
 			max			=	function()
-								local v3_max = v3.max
+								local v3_max <const> = v3.max
 								return function(WrappedV3)
 									return v3_max(WrappedV3.V3)
 								end
 							end,
 			dot			=	function()
-								local v3_dot = v3.dot
+								local v3_dot <const> = v3.dot
 								return function(WrappedV3A, WrappedV3B)
 									return v3_dot(WrappedV3A.V3, WrappedV3B.V3)
 								end
 							end,
 			normalise	=	function()
-								local v3_normalise = v3.normalise
+								local v3_normalise <const> = v3.normalise
 								return function(WrappedV3)
 									v3_normalise(WrappedV3.V3)
 								end
 							end,
 			crossProduct=	function()
-								local v3_crossProduct = v3.crossProduct
+								local v3_crossProduct <const> = v3.crossProduct
 								return function(WrappedV3A, WrappedV3B)
 									return WrapNewInstance(v3_crossProduct(WrappedV3A.V3, WrappedV3B.V3))
 								end
 							end,
 			toRot		=	function()
-								local v3_toRot = v3.toRot
+								local v3_toRot <const> = v3.toRot
 								return function(WrappedV3)
 									return WrapNewInstance(v3_toRot(WrappedV3.V3))
 								end
 							end,
 			lookAt		=	function()
-								local v3_lookAt = v3.lookAt
+								local v3_lookAt <const> = v3.lookAt
 								return function(WrappedV3A, WrappedV3B)
 									return WrapNewInstance(v3_lookAt(WrappedV3A.V3, WrappedV3B.V3))
 								end
 							end,
 			toDir		=	function()
-								local v3_toDir = v3.toDir
+								local v3_toDir <const> = v3.toDir
 								return function(WrappedV3)
 									return WrapNewInstance(v3_toDir(WrappedV3.V3))
 								end
 							end,
 			toString	=	function()
-								local v3_toString = v3.toString
+								local v3_toString <const> = v3.toString
 								return function(WrappedV3)
 									return WrapNewInstance(v3_toString(WrappedV3.V3))
 								end
 							end,
 		}
-		local pairs = pairs
+		local pairs <const> = pairs
 		for Key, NewReplacementFunction in pairs(Functions) do
 			v3[Key] = NewReplacementFunction()
 		end
 	end
 	
 	local function OverrideFunctionV3Output(Function)
-		local Function = Function
+		local Function <const> = Function
 		return function(...)
 			return V3New(Function(...))
 		end
